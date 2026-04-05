@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Danh mục sản phẩm — iStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  .category-wrapper { padding-top: 100px; }
+  .category-title { text-align: center; margin: 40px 0 20px; }
+  .breadcrumb { text-align: center; color: var(--gray); margin-bottom: 30px; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">iStore</a>
+
+    <!-- NAV LINKS -->
+    <div class="nav-links">
+      <a href="/" class="nav-link">📱 Sản phẩm</a>
+      <a href="/category.html?type=new" class="nav-link">Hàng mới</a>
+      <a href="/category.html?type=used" class="nav-link">Hàng cũ</a>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="nav-search-wrap">
+      <div class="category-dropdown-wrapper">
+        <button class="category-dropdown-btn" id="categoryBtn" onclick="toggleCategoryDropdown()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <span>Danh mục</span>
+        </button>
+        <div class="category-dropdown-menu" id="categoryDropdown">
+          <button onclick="goToCategory('all')">📱 Tất cả</button>
+          <button onclick="goToCategory('new')">✨ Hàng mới</button>
+          <button onclick="goToCategory('used')">♻️ Hàng cũ</button>
+          <button onclick="goToCategory('accessories')">🎧 Phụ kiện</button>
+          <hr style="margin:8px 0;border:none;border-top:1px solid var(--border2)">
+          <button onclick="goToiPhoneModel('iphone17')">📱 iPhone 17</button>
+          <button onclick="goToiPhoneModel('iphone16')">📱 iPhone 16</button>
+          <button onclick="goToiPhoneModel('iphone15')">📱 iPhone 15</button>
+          <button onclick="goToiPhoneModel('iphone14')">📱 iPhone 14</button>
+          <button onclick="goToiPhoneModel('iphone13')">📱 iPhone 13</button>
+          <button onclick="goToiPhoneModel('iphone12')">📱 iPhone 12</button>
+        </div>
+      </div>
+
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Bạn cần tìm gì?" autocomplete="off">
+        <button class="search-icon-btn" onclick="doSearch()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+      </div>
+      <div id="searchSuggestions" class="search-suggestions"></div>
+    </div>
+
+    <!-- RIGHT ACTIONS -->
+    <div class="nav-actions">
+      <button class="nav-icon-btn" onclick="toggleCart()" title="Giỏ hàng">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge" id="cartCount" style="display:none">0</span>
+        <span class="nav-icon-label">Giỏ hàng</span>
+      </button>
+
+      <div class="nav-user" id="navUser">
+        <button class="nav-icon-btn" onclick="openModal('loginModal')" title="Đăng nhập">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span class="nav-icon-label">Đăng nhập</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Category Content -->
+<section class="category-wrapper">
+  <div id="products" class="products-grid">
+    <h1 class="category-title" id="categoryTitle">Danh mục sản phẩm</h1>
+    <p class="breadcrumb" id="breadcrumb"></p>
+    
+    <!-- FILTER CHIPS -->
+    <div style="display:flex;gap:12px;margin-bottom:24px;margin-top:20px;padding:0 20px">
+      <button class="filter-chip active" onclick="setCondition('all', this)">Tất cả</button>
+      <button class="filter-chip" onclick="setCondition('new', this)">Hàng mới</button>
+      <button class="filter-chip" onclick="setCondition('used', this)">Hàng cũ</button>
+    </div>
+
+    <!-- SORT -->
+    <div style="display:flex;justify-content:space-between;padding:0 20px;margin-bottom:20px">
+      <div></div>
+      <select id="sortSelect" onchange="loadProducts(true)" style="background:var(--dark3);border:1px solid var(--border2);color:var(--white);padding:9px 14px;border-radius:8px;font-size:0.9rem">
+        <option value="">Mới nhất</option>
+        <option value="price_asc">Giá: thấp → cao</option>
+        <option value="price_desc">Giá: cao → thấp</option>
+      </select>
+    </div>
+
+    <!-- Products Grid -->
+    <div id="productGrid" class="products-grid" style="padding:20px"></div>
+  </div>
+
+  <div class="load-more-wrap">
+    <button class="btn-outline" id="loadMoreBtn" style="display:none" onclick="loadMore()">Xem thêm</button>
+  </div>
+</section>
+
+<!-- CART DRAWER -->
+<div id="cartOverlay" class="overlay" onclick="toggleCart()"></div>
+<div id="cartDrawer" class="cart-drawer">
+  <div class="cart-header">
+    <h3>Giỏ hàng của tôi</h3>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div id="cartItems" class="cart-items"></div>
+  <div id="cartFooter" class="cart-footer" style="display:none">
+    <div class="cart-total">Tổng cộng: <strong id="cartTotal">0 ₫</strong></div>
+    <button class="btn-primary" onclick="goToCheckout()">Thanh toán</button>
+  </div>
+  <div style="text-align:center;padding:40px;color:var(--gray)" id="emptyCart">
+    Giỏ hàng còn trống
+  </div>
+</div>
+
+<!-- LOGIN / REGISTER MODAL -->
+<div id="loginModal" class="modal-overlay" onclick="closeModalOnOverlay(event,'loginModal')">
+  <div class="login-modal-box">
+    <button class="login-modal-close" onclick="closeModal('loginModal')">✕</button>
+
+    <!-- Login Form -->
+    <div id="loginView">
+      <h2 class="login-title">Login</h2>
+      <form onsubmit="doLogin(event)">
+        <div class="login-field">
+          <input type="email" id="loginEmail" placeholder="Email" required autocomplete="off">
+          <span class="login-field-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+        </div>
+        <div class="login-field">
+          <input type="password" id="loginPassword" placeholder="Mật khẩu" required autocomplete="off">
+          <span class="login-field-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </span>
+        </div>
+        <div id="loginError" class="login-error"></div>
+        <button type="submit" class="login-btn">Đăng nhập</button>
+      </form>
+      <p class="login-switch">Chưa có tài khoản? <button onclick="switchLoginView('register')">Đăng ký</button></p>
+    </div>
+
+    <!-- Register Form -->
+    <div id="registerView" style="display:none">
+      <h2 class="login-title">Register</h2>
+      <form onsubmit="doRegister(event)">
+        <div class="login-field">
+          <input type="text" id="regName" placeholder="Họ tên" required autocomplete="off">
+          <span class="login-field-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+        </div>
+        <div class="login-field">
+          <input type="email" id="regEmail" placeholder="Email" required autocomplete="off">
+          <span class="login-field-icon">✉</span>
+        </div>
+        <div class="login-field">
+          <input type="tel" id="regPhone" placeholder="Số điện thoại" autocomplete="off">
+          <span class="login-field-icon">📞</span>
+        </div>
+        <div class="login-field">
+          <input type="password" id="regPassword" placeholder="Mật khẩu (ít nhất 6 ký tự)" required autocomplete="off">
+          <span class="login-field-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </span>
+        </div>
+        <div id="regError" class="login-error"></div>
+        <button type="submit" class="login-btn">Tạo tài khoản</button>
+      </form>
+      <p class="login-switch">Đã có tài khoản? <button onclick="switchLoginView('login')">Đăng nhập</button></p>
+    </div>
+  </div>
+</div>
+
+<!-- CHANGE PASSWORD MODAL -->
+<div id="changePasswordModal" class="modal-overlay" onclick="closeModalOnOverlay(event,'changePasswordModal')">
+  <div class="modal-box" style="max-width:420px">
+    <button class="modal-close" onclick="closeModal('changePasswordModal')">✕</button>
+    <h2 class="modal-title">🔐 Đổi mật khẩu</h2>
+    <form id="changePasswordForm" onsubmit="doChangePassword(event)">
+      <div class="form-group">
+        <label>Mật khẩu cũ</label>
+        <input type="password" id="cpOldPassword" placeholder="Nhập mật khẩu cũ" required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>Mật khẩu mới</label>
+        <input type="password" id="cpNewPassword" placeholder="Nhập mật khẩu mới (ít nhất 6 ký tự)" required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>Xác nhận mật khẩu mới</label>
+        <input type="password" id="cpConfirmPassword" placeholder="Xác nhận mật khẩu mới" required autocomplete="off">
+      </div>
+      <div id="cpError" class="form-error"></div>
+      <button type="submit" class="btn-primary w100">Đổi mật khẩu</button>
+    </form>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<!-- ZALO FLOAT -->
+<a href="https://zalo.me/0909123456" target="_blank" class="zalo-float" title="Chat Zalo">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.5 13.5h-9v-1.5l5.5-5.5H7.5V7h9v1.5L11 14h5.5v1.5z"/></svg>
+  <span class="zalo-label">Zalo</span>
+</a>
+
+<script src="/js/app.js"></script>
+<script>
+// Category-specific logic
+const urlParams = new URLSearchParams(window.location.search);
+const categoryType = urlParams.get('type') || 'all';
+const modelParam = urlParams.get('model') || '';
+const searchQuery = urlParams.get('q') || '';
+
+function goToCategory(cat) {
+  if (cat === 'all') window.location.href = '/';
+  else if (cat === 'accessories') window.location.href = `/category.html?type=${cat}`;
+  else if (cat === 'new' || cat === 'used') window.location.href = `/category.html?type=${cat}`;
+}
+
+function goToiPhoneModel(model) {
+  window.location.href = `/category.html?model=${model}`;
+}
+
+// Set initial category
+function initCategoryPage() {
+  const categoryTitles = {
+    'new': '✨ Sản phẩm mới',
+    'used': '♻️ Sản phẩm cũ',
+    'accessories': '🎧 Phụ kiện',
+    'all': '📱 Tất cả sản phẩm'
+  };
+
+  const modelNames = {
+    'iphone17': 'iPhone 17',
+    'iphone16': 'iPhone 16',
+    'iphone15': 'iPhone 15',
+    'iphone14': 'iPhone 14',
+    'iphone13': 'iPhone 13',
+    'iphone12': 'iPhone 12'
+  };
+
+  // Set category filtering based on URL parameter
+  if (categoryType === 'new' || categoryType === 'used') {
+    // These are conditions, not categories
+    currentCondition = categoryType;
+    currentCategory = 'all';
+    document.getElementById('categoryTitle').textContent = categoryTitles[categoryType];
+    document.getElementById('breadcrumb').textContent = `iStore / ${categoryTitles[categoryType]}`;
+  } else if (categoryType === 'accessories') {
+    // This is a category
+    currentCondition = 'all';
+    currentCategory = 'accessories';
+    document.getElementById('categoryTitle').textContent = categoryTitles[categoryType];
+    document.getElementById('breadcrumb').textContent = `iStore / ${categoryTitles[categoryType]}`;
+  } else {
+    currentCondition = 'all';
+    currentCategory = 'all';
+  }
+
+  // Handle iPhone model search
+  if (modelParam) {
+    const modelMap = {
+      'iphone17': 'iPhone 17',
+      'iphone16': 'iPhone 16',
+      'iphone15': 'iPhone 15',
+      'iphone14': 'iPhone 14',
+      'iphone13': 'iPhone 13',
+      'iphone12': 'iPhone 12'
+    };
+    const modelName = modelMap[modelParam] || modelParam;
+    document.getElementById('searchInput').value = modelName;
+    document.getElementById('categoryTitle').textContent = modelName;
+    document.getElementById('breadcrumb').textContent = `iStore / ${modelName}`;
+  }
+
+  loadProducts(true);
+  checkAuth();
+}
+
+// Override app.js filterByCategory to navigate instead
+window.filterByCategory = function(category) {
+  goToCategory(category);
+};
+
+window.filterByiPhoneModel = function(model) {
+  goToiPhoneModel(model);
+};
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', initCategoryPage);
+</script>
+</body>
+</html>

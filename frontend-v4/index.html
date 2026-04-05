@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iStore — iPhone Chính Hãng</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">iStore</a>
+
+    <!-- NAV LINKS -->
+    <div class="nav-links">
+      <a href="#products" class="nav-link">📱 Sản phẩm</a>
+      <a href="/category.html?type=new" class="nav-link">Hàng mới</a>
+      <a href="/category.html?type=used" class="nav-link">Hàng cũ</a>
+    </div>
+
+    <!-- SEARCH - rộng, icon ở cuối -->
+    <div class="nav-search-wrap">
+      <!-- CATEGORY DROPDOWN -->
+      <div class="category-dropdown-wrapper">
+        <button class="category-dropdown-btn" id="categoryBtn" onclick="toggleCategoryDropdown()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <span>Danh mục</span>
+        </button>
+        <div class="category-dropdown-menu" id="categoryDropdown">
+          <button onclick="filterByCategory('all')">📱 Tất cả</button>
+          <button onclick="filterByCategory('new')">✨ Hàng mới</button>
+          <button onclick="filterByCategory('used')">♻️ Hàng cũ</button>
+          <button onclick="filterByCategory('accessories')">🎧 Phụ kiện</button>
+          <hr style="margin:8px 0;border:none;border-top:1px solid var(--border2)">
+          <button onclick="filterByiPhoneModel('iphone17')">📱 iPhone 17</button>
+          <button onclick="filterByiPhoneModel('iphone16')">📱 iPhone 16</button>
+          <button onclick="filterByiPhoneModel('iphone15')">📱 iPhone 15</button>
+          <button onclick="filterByiPhoneModel('iphone14')">📱 iPhone 14</button>
+          <button onclick="filterByiPhoneModel('iphone13')">📱 iPhone 13</button>
+          <button onclick="filterByiPhoneModel('iphone12')">📱 iPhone 12</button>
+        </div>
+      </div>
+
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Bạn cần tìm gì?" autocomplete="off">
+        <button class="search-icon-btn" onclick="doSearch()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+      </div>
+      <div id="searchSuggestions" class="search-suggestions"></div>
+    </div>
+
+    <!-- RIGHT ACTIONS -->
+    <div class="nav-actions">
+      <button class="nav-icon-btn" onclick="toggleCart()" title="Giỏ hàng">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge" id="cartCount" style="display:none">0</span>
+        <span class="nav-icon-label">Giỏ hàng</span>
+      </button>
+
+      <div class="nav-user" id="navUser">
+        <button class="nav-icon-btn" onclick="openModal('loginModal')" title="Đăng nhập">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span class="nav-icon-label">Đăng nhập</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="heroSection" style="position:relative">
+  <div id="bannerSlider" class="banner-slider">
+    <div class="banner-default">
+      <div class="banner-content">
+        <p class="banner-eyebrow">iPhone Chính Hãng Apple VN/A</p>
+        <h1 class="banner-title">Đỉnh cao công nghệ.<br><span>Trong tầm tay.</span></h1>
+        <p class="banner-sub">Bảo hành 12 tháng · Trả góp 0% · Giao hàng nhanh</p>
+        <button class="btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Khám phá ngay</button>
+      </div>
+      <div class="banner-phone-wrap">
+        <div class="banner-phone-mock">
+          <div class="banner-phone-notch"></div>
+          <div class="banner-phone-screen">
+            <div class="bps-icon">📱</div>
+            <div class="bps-model">iPhone 16 Pro Max</div>
+            <div class="bps-chip">A18 Pro · Titanium</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="adminBannerBtn" style="display:none;position:absolute;top:24px;right:24px;z-index:10">
+    <button class="admin-fab-btn" onclick="openAdminBannerForm()">＋ Thêm Banner</button>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <div class="marquee-track">
+    <span>Bảo hành 12 tháng ✦</span><span>Trả góp 0% lãi suất ✦</span><span>Giao hàng nhanh ✦</span><span>iPhone chính hãng VN/A ✦</span><span>Hỗ trợ 24/7 ✦</span><span>Đổi trả 30 ngày ✦</span>
+    <span>Bảo hành 12 tháng ✦</span><span>Trả góp 0% lãi suất ✦</span><span>Giao hàng nhanh ✦</span><span>iPhone chính hãng VN/A ✦</span><span>Hỗ trợ 24/7 ✦</span><span>Đổi trả 30 ngày ✦</span>
+  </div>
+</div>
+
+<!-- GỢI Ý -->
+<section id="recommendSection" class="section" style="display:none">
+  <div class="section-header">
+    <div><p class="section-label">Dành riêng cho bạn</p><h2 class="section-title">Gợi ý sản phẩm</h2></div>
+  </div>
+  <div class="product-grid" id="recommendGrid"></div>
+</section>
+
+<!-- SẢN PHẨM -->
+<section id="products" class="section">
+  <div class="section-header">
+    <div><p class="section-label" id="productsLabel">Tất cả sản phẩm</p><h2 class="section-title" id="productsTitle">Dòng iPhone 2024–2025</h2></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div id="adminAddProductBtn" style="display:none">
+        <button class="admin-fab-btn" onclick="window.open('/admin','_blank')">＋ Thêm sản phẩm</button>
+      </div>
+      <div class="filter-chips">
+        <button class="filter-chip active" onclick="setCondition('all',this)">Tất cả</button>
+        <button class="filter-chip" onclick="setCondition('new',this)">Hàng mới</button>
+        <button class="filter-chip" onclick="setCondition('used',this)">Hàng cũ</button>
+      </div>
+      <select id="sortSelect" onchange="doSearch()" class="sort-select">
+        <option value="newest">Mới nhất</option>
+        <option value="price_asc">Giá tăng dần</option>
+        <option value="price_desc">Giá giảm dần</option>
+      </select>
+    </div>
+  </div>
+  <div class="product-grid" id="productGrid">
+    <div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--gray)">Đang tải...</div>
+  </div>
+  <div class="load-more-wrap">
+    <button class="btn-outline" id="loadMoreBtn" style="display:none" onclick="loadMore()">Xem thêm</button>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<div class="features-strip">
+  <div class="feature-item"><span class="fi-icon">🛡️</span><strong>Bảo hành 12 tháng</strong><p>Toàn cầu từ Apple</p></div>
+  <div class="feature-item"><span class="fi-icon">💳</span><strong>Trả góp 0%</strong><p>18 ngân hàng, 24 tháng</p></div>
+  <div class="feature-item"><span class="fi-icon">🚀</span><strong>Giao hàng nhanh</strong><p>Toàn quốc</p></div>
+  <div class="feature-item"><span class="fi-icon">🔄</span><strong>Đổi trả 30 ngày</strong><p>Hoàn tiền 100%</p></div>
+</div>
+
+<!-- ZALO FLOAT -->
+<a href="https://zalo.me/0909123456" target="_blank" class="zalo-float" title="Chat Zalo">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.5 13.5h-9v-1.5l5.5-5.5H7.5V7h9v1.5L11 14h5.5v1.5z"/></svg>
+  <span class="zalo-label">Zalo</span>
+</a>
+
+<!-- CART DRAWER -->
+<div id="cartOverlay" class="overlay" onclick="toggleCart()"></div>
+<div id="cartDrawer" class="cart-drawer">
+  <div class="drawer-header">
+    <h3>Giỏ hàng</h3>
+    <button onclick="toggleCart()" class="close-btn">✕</button>
+  </div>
+  <div id="cartBody" class="cart-body"><p class="empty-msg">Giỏ hàng trống 🛒</p></div>
+  <div id="cartFooter" class="cart-footer" style="display:none">
+    <div class="cart-total-row"><span>Tổng cộng:</span><strong id="cartTotal">0₫</strong></div>
+    <button class="btn-primary w100" onclick="goCheckout()">Thanh toán ngay</button>
+  </div>
+</div>
+
+<!-- PRODUCT DETAIL MODAL -->
+<div id="productModal" class="modal-overlay" onclick="closeProductModal(event)">
+  <div class="modal-box product-modal-box">
+    <button class="modal-close" onclick="document.getElementById('productModal').classList.remove('active')">✕</button>
+    <div id="productModalContent"></div>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div id="checkoutModal" class="modal-overlay" onclick="closeModalOnOverlay(event,'checkoutModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('checkoutModal')">✕</button>
+    <h2 class="modal-title" id="checkoutTitle">Đặt hàng</h2>
+    <div id="checkoutContent"></div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL — phong cách ảnh gửi -->
+<div id="loginModal" class="modal-overlay" onclick="closeModalOnOverlay(event,'loginModal')">
+  <div class="login-modal-box">
+    <button class="login-modal-close" onclick="closeModal('loginModal')">✕</button>
+
+    <!-- Login Form -->
+    <div id="loginView">
+      <h2 class="login-title">Login</h2>
+      <form onsubmit="doLogin(event)">
+        <div class="login-field">
+          <input type="email" id="loginEmail" placeholder="Email" required autocomplete="off">
+          <span class="login-field-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+        </div>
+        <div class="login-field">
+          <input type="password" id="loginPassword" placeholder="Mật khẩu" required autocomplete="off">
+          <span class="login-field-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </span>
+        </div>
+        <div id="loginError" class="login-error"></div>
+        <button type="submit" class="login-btn">Đăng nhập</button>
+      </form>
+      <p class="login-switch">Chưa có tài khoản? <button onclick="switchLoginView('register')">Đăng ký</button></p>
+    </div>
+
+    <!-- Register Form -->
+    <div id="registerView" style="display:none">
+      <h2 class="login-title">Register</h2>
+      <form onsubmit="doRegister(event)">
+        <div class="login-field">
+          <input type="text" id="regName" placeholder="Họ tên" required autocomplete="off">
+          <span class="login-field-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+        </div>
+        <div class="login-field">
+          <input type="email" id="regEmail" placeholder="Email" required autocomplete="off">
+          <span class="login-field-icon">✉</span>
+        </div>
+        <div class="login-field">
+          <input type="tel" id="regPhone" placeholder="Số điện thoại" autocomplete="off">
+          <span class="login-field-icon">📞</span>
+        </div>
+        <div class="login-field">
+          <input type="password" id="regPassword" placeholder="Mật khẩu (ít nhất 6 ký tự)" required autocomplete="off">
+          <span class="login-field-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </span>
+        </div>
+        <div id="regError" class="login-error"></div>
+        <button type="submit" class="login-btn">Tạo tài khoản</button>
+      </form>
+      <p class="login-switch">Đã có tài khoản? <button onclick="switchLoginView('login')">Đăng nhập</button></p>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PRODUCT INFO MODAL -->
+<div id="adminInfoModal" class="modal-overlay" onclick="closeModalOnOverlay(event,'adminInfoModal')">
+  <div class="modal-box" style="max-width:560px">
+    <button class="modal-close" onclick="closeModal('adminInfoModal')">✕</button>
+    <h2 class="modal-title">✏️ Chỉnh thông tin sản phẩm</h2>
+    <form id="adminInfoForm" onsubmit="submitAdminProductInfo(event)">
+      <input type="hidden" id="ai_product_id">
+      <div class="form-group"><label>Tên sản phẩm</label><input type="text" id="ai_name"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Giá bán (₫)</label><input type="number" id="ai_price"></div>
+        <div class="form-group"><label>Số lượng tồn</label><input type="number" id="ai_stock"></div>
+      </div>
+      <div class="form-group"><label>Mô tả</label><textarea id="ai_desc" rows="3"></textarea></div>
+      <div class="form-group"><label>Thông số JSON</label><textarea id="ai_specs" rows="3" placeholder='{"Chip":"A18 Pro","Camera":"48MP"}'></textarea></div>
+      <div class="form-group"><label>Upload ảnh</label><input type="file" id="ai_images" accept="image/*" multiple></div>
+      <div id="ai_current_imgs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px"></div>
+      <div id="aiError" class="form-error"></div>
+      <button type="submit" class="btn-primary w100">Lưu thay đổi</button>
+    </form>
+  </div>
+</div>
+
+<!-- ADMIN BANNER MODAL -->
+<div id="adminBannerModal" class="modal-overlay" onclick="closeModalOnOverlay(event,'adminBannerModal')">
+  <div class="modal-box" style="max-width:480px">
+    <button class="modal-close" onclick="closeModal('adminBannerModal')">✕</button>
+    <h2 class="modal-title">＋ Thêm Banner</h2>
+    <form id="adminBannerForm" onsubmit="submitAdminBanner(event)">
+      <div class="form-group"><label>Tiêu đề</label><input type="text" id="ab_title"></div>
+      <div class="form-group"><label>Phụ đề</label><input type="text" id="ab_subtitle"></div>
+      <div class="form-group"><label>Link</label><input type="url" id="ab_link" placeholder="https://..."></div>
+      <div class="form-group"><label>Hình ảnh</label><input type="file" id="ab_image" accept="image/*"></div>
+      <div id="abError" class="form-error"></div>
+      <button type="submit" class="btn-primary w100">Đăng banner</button>
+    </form>
+  </div>
+</div>
+
+<!-- CHANGE PASSWORD MODAL -->
+<div id="changePasswordModal" class="modal-overlay" onclick="closeModalOnOverlay(event,'changePasswordModal')">
+  <div class="modal-box" style="max-width:420px">
+    <button class="modal-close" onclick="closeModal('changePasswordModal')">✕</button>
+    <h2 class="modal-title">🔐 Đổi mật khẩu</h2>
+    <form id="changePasswordForm" onsubmit="doChangePassword(event)">
+      <div class="form-group">
+        <label>Mật khẩu cũ</label>
+        <input type="password" id="cpOldPassword" placeholder="Nhập mật khẩu cũ" required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>Mật khẩu mới</label>
+        <input type="password" id="cpNewPassword" placeholder="Nhập mật khẩu mới (ít nhất 6 ký tự)" required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>Xác nhận mật khẩu mới</label>
+        <input type="password" id="cpConfirmPassword" placeholder="Xác nhận mật khẩu mới" required autocomplete="off">
+      </div>
+      <div id="cpError" class="form-error"></div>
+      <button type="submit" class="btn-primary w100">Đổi mật khẩu</button>
+    </form>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<!-- INSTALLMENT SERVICE MODAL -->
+<div id="installmentModal" class="modal-overlay" onclick="closeModalOnOverlay(event,'installmentModal')">
+  <div class="modal-box" style="max-width:600px">
+    <button class="modal-close" onclick="closeModal('installmentModal')">✕</button>
+    <h2 class="modal-title">💳 Dịch vụ trả góp 0%</h2>
+    <div style="padding:20px">
+      <p style="margin-bottom:16px;color:var(--text)">Trả góp 0% lãi suất cho tất cả sản phẩm iPhone chính hãng.</p>
+      <div style="background:var(--bg3);padding:16px;border-radius:12px;margin-bottom:16px">
+        <h3 style="font-size:0.95rem;margin-bottom:12px;color:var(--gold)">Ưu điểm nổi bật:</h3>
+        <ul style="list-style:none;padding:0">
+          <li style="margin-bottom:8px">✓ Lãi suất 0% - không phí lăng xăng</li>
+          <li style="margin-bottom:8px">✓ Kỳ hạn linh hoạt từ 3 đến 24 tháng</li>
+          <li style="margin-bottom:8px">✓ Hỗ trợ 18 ngân hàng và ví điện tử</li>
+          <li style="margin-bottom:8px">✓ Duyệt hồ sơ nhanh chóng trong 24 giờ</li>
+          <li style="margin-bottom:8px">✓ Không cần chứng minh thu nhập (dưới 5 triệu)</li>
+          <li>✓ Hỗ trợ khách hàng 24/7</li>
+        </ul>
+      </div>
+      <div style="background:var(--bg3);padding:16px;border-radius:12px">
+        <h3 style="font-size:0.95rem;margin-bottom:12px;color:var(--gold)">Các bước đơn giản:</h3>
+        <ol style="padding-left:20px">
+          <li style="margin-bottom:8px">Chọn sản phẩm iPhone yêu thích</li>
+          <li style="margin-bottom:8px">Lựa chọn kỳ hạn thanh toán</li>
+          <li style="margin-bottom:8px">Điền thông tin hồ sơ trên hệ thống</li>
+          <li>Chờ phê duyệt và nhận sản phẩm ngay</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WARRANTY SERVICE MODAL -->
+<div id="warrantyModal" class="modal-overlay" onclick="closeModalOnOverlay(event,'warrantyModal')">
+  <div class="modal-box" style="max-width:600px">
+    <button class="modal-close" onclick="closeModal('warrantyModal')">✕</button>
+    <h2 class="modal-title">🛡️ Dịch vụ bảo hành 12 tháng</h2>
+    <div style="padding:20px">
+      <p style="margin-bottom:16px;color:var(--text)">Bảo hành 12 tháng chính hãng từ Apple cho tất cả sản phẩm.</p>
+      <div style="background:var(--bg3);padding:16px;border-radius:12px;margin-bottom:16px">
+        <h3 style="font-size:0.95rem;margin-bottom:12px;color:var(--gold)">Phạm vi bảo hành:</h3>
+        <ul style="list-style:none;padding:0">
+          <li style="margin-bottom:8px">✓ Bảo hành lỗi công nghệ 12 tháng</li>
+          <li style="margin-bottom:8px">✓ Sửa chữa miễn phí bất kỳ lỗi phần cứng</li>
+          <li style="margin-bottom:8px">✓ Thay thế pin miễn phí nếu giảm dưới 80%</li>
+          <li style="margin-bottom:8px">✓ Hỗ trợ trên toàn quốc</li>
+          <li style="margin-bottom:8px">✓ Hỗ trợ trực tuyến 24/7 miễn phí</li>
+          <li>✓ Không mất quyền bảo hành khi sử dụng phục vụ bên thứ ba (Apple authorized)</li>
+        </ul>
+      </div>
+      <div style="background:var(--bg3);padding:16px;border-radius:12px">
+        <h3 style="font-size:0.95rem;margin-bottom:12px;color:var(--gold)">Không bảo hành cho:</h3>
+        <ul style="list-style:none;padding:0">
+          <li style="margin-bottom:8px">✗ Hư hỏng do rơi, va đập hoặc tác động cơ học</li>
+          <li style="margin-bottom:8px">✗ Hư hỏng do tiếp xúc với chất lỏng</li>
+          <li style="margin-bottom:8px">✗ Các vết cua rói, xước, hay vết chân trầy phía ngoài</li>
+          <li>✗ Sửa chữa do công ty khác không được phê duyệt</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="main-footer">
+  <div class="footer-inner">
+    <div>
+      <div class="nav-logo" style="margin-bottom:12px">iStore</div>
+      <p>Hệ thống bán lẻ iPhone chính hãng uy tín hàng đầu Việt Nam.</p>
+      <p style="margin-top:8px">📞 <a href="tel:0909123456">0909 123 456</a></p>
+      <p style="margin-top:4px">✉️ <a href="mailto:vuquangduydvtb@gmail.com" id="footerEmail">vuquangduydvtb@gmail.com</a></p>
+    </div>
+    <div><h4>Dịch vụ</h4><ul><li><a href="#" onclick="openModal('installmentModal');return false">💳 Trả góp 0%</a></li><li><a href="#" onclick="openModal('warrantyModal');return false">🛡️ Bảo hành 12 tháng</a></li></ul></div>
+    <div><h4>Liên hệ</h4><ul><li><a href="https://zalo.me/0909123456" target="_blank">Zalo: 0909 123 456</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 iStore Vietnam · iPhone chính hãng VN/A</p></div>
+</footer>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

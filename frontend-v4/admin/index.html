@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — iStore Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="admin-body">
+
+<!-- ADMIN LOGIN -->
+<div id="adminLoginWrap" class="admin-login-wrap">
+  <div class="admin-login-box">
+    <div class="nav-logo" style="margin-bottom:8px">iStore</div>
+    <p style="color:var(--gray);font-size:0.8rem;margin-bottom:28px;letter-spacing:2px;text-transform:uppercase">Trang Quản Trị</p>
+    <form onsubmit="adminLogin(event)">
+      <div class="form-group"><label>Email Admin</label><input type="email" id="aEmail" placeholder="admin@istore.vn" required autocomplete="off"></div>
+      <div class="form-group"><label>Mật khẩu</label><input type="password" id="aPass" placeholder="••••••" required autocomplete="off"></div>
+      <div id="aError" class="form-error"></div>
+      <button type="submit" class="btn-primary w100">Đăng nhập Admin</button>
+    </form>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div id="adminDash" class="admin-dash" style="display:none">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo"><span class="nav-logo">iStore</span><span style="font-size:0.65rem;color:var(--gray);letter-spacing:1px;display:block;margin-top:2px">ADMIN PANEL</span></div>
+    <nav class="sidebar-nav">
+      <a href="#" class="snav-item active" onclick="showPage('stats',this)">📊 Thống kê</a>
+      <a href="#" class="snav-item" onclick="showPage('products',this)">📱 Sản phẩm</a>
+      <a href="#" class="snav-item" onclick="showPage('banners',this)">🖼️ Banners</a>
+      <a href="#" class="snav-item" onclick="showPage('orders',this)">📦 Đơn hàng</a>
+      <a href="#" class="snav-item" onclick="showPage('users',this)">👥 Khách hàng</a>
+      <a href="#" class="snav-item" onclick="showPage('settings',this)">⚙️ Cài đặt</a>
+    </nav>
+    <button class="btn-outline" style="margin:20px;width:calc(100%-40px);background:rgba(201,168,76,0.15);border-color:rgba(201,168,76,0.5)" onclick="openModal('adminChangePasswordModal')">🔐 Đổi mật khẩu</button>
+    <button class="btn-danger" style="margin:20px;width:calc(100%-40px)" onclick="adminLogout()">Đăng xuất</button>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+
+    <!-- STATS PAGE -->
+    <div id="page-stats" class="admin-page">
+      <h1 class="page-title">Tổng quan</h1>
+      <div class="stat-cards" id="statCards"></div>
+      <div class="admin-grid-2">
+        <div class="admin-card">
+          <h3>Doanh thu 7 ngày</h3>
+          <canvas id="revenueChart" height="200"></canvas>
+        </div>
+        <div class="admin-card">
+          <h3>Đơn hàng gần đây</h3>
+          <div id="recentOrdersList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS PAGE -->
+    <div id="page-products" class="admin-page" style="display:none">
+      <div class="page-header">
+        <h1 class="page-title">Quản lý sản phẩm</h1>
+        <button class="btn-primary" onclick="openProductForm()">+ Thêm sản phẩm</button>
+      </div>
+      <div class="admin-card mb20">
+        <input type="text" id="prodSearch" placeholder="Tìm sản phẩm..." style="width:100%;padding:10px 14px;background:var(--dark3);border:1px solid var(--border2);color:var(--white);border-radius:8px;font-size:0.9rem" oninput="searchAdminProducts()">
+      </div>
+      <div class="admin-card">
+        <div class="admin-table-wrap"><table class="admin-table" id="productTable"></table></div>
+      </div>
+    </div>
+
+    <!-- BANNERS PAGE -->
+    <div id="page-banners" class="admin-page" style="display:none">
+      <div class="page-header">
+        <h1 class="page-title">Quản lý Banner</h1>
+        <button class="btn-primary" onclick="openBannerForm()">+ Thêm banner</button>
+      </div>
+      <div class="admin-card">
+        <div id="bannerList"></div>
+      </div>
+    </div>
+
+    <!-- ORDERS PAGE -->
+    <div id="page-orders" class="admin-page" style="display:none">
+      <div class="page-header">
+        <h1 class="page-title">Quản lý đơn hàng</h1>
+        <select id="orderFilter" onchange="loadAdminOrders()" style="background:var(--dark3);border:1px solid var(--border2);color:var(--white);padding:9px 14px;border-radius:8px;font-size:0.82rem">
+          <option value="">Tất cả</option>
+          <option value="pending">Chờ xác nhận</option>
+          <option value="confirmed">Đã xác nhận</option>
+          <option value="shipping">Đang giao</option>
+          <option value="delivered">Đã giao</option>
+          <option value="cancelled">Đã hủy</option>
+        </select>
+      </div>
+      <div class="admin-card"><div class="admin-table-wrap"><table class="admin-table" id="ordersTable"></table></div></div>
+    </div>
+
+    <!-- USERS PAGE -->
+    <div id="page-users" class="admin-page" style="display:none">
+      <h1 class="page-title">Khách hàng</h1>
+      <div class="admin-card"><div class="admin-table-wrap"><table class="admin-table" id="usersTable"></table></div></div>
+    </div>
+
+    <!-- SETTINGS PAGE -->
+    <div id="page-settings" class="admin-page" style="display:none">
+      <h1 class="page-title">Cài đặt cửa hàng</h1>
+      <div class="admin-card">
+        <form onsubmit="saveSettings(event)" enctype="multipart/form-data">
+          <div class="form-row">
+            <div class="form-group"><label>Số điện thoại cửa hàng</label><input type="text" id="s_phone" placeholder="0909..."></div>
+            <div class="form-group"><label>Số Zalo</label><input type="text" id="s_zalo" placeholder="0909..."></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Email cửa hàng</label><input type="email" id="s_email" placeholder="vuquangduydvtb@gmail.com"></div>
+            <div class="form-group" style="opacity:0;pointer-events:none"><label>-</label><input type="text"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Phần trăm cọc (%)</label><input type="number" id="s_dep_pct" min="10" max="50" placeholder="30"></div>
+            <div class="form-group"><label>Số ngày giữ cọc tối đa</label><input type="number" id="s_dep_days" min="1" max="30" placeholder="14"></div>
+          </div>
+          <h4 style="margin:24px 0 16px;font-size:0.78rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase">QR Thanh toán</h4>
+          <div class="form-row">
+            <div class="form-group"><label>Momo QR (upload ảnh)</label><input type="file" id="s_momo" accept="image/*"><div class="qr-preview" id="prev_momo"></div></div>
+            <div class="form-group"><label>ZaloPay QR (upload ảnh)</label><input type="file" id="s_zalopay" accept="image/*"><div class="qr-preview" id="prev_zalopay"></div></div>
+          </div>
+          <button type="submit" class="btn-primary mt16">Lưu cài đặt</button>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- PRODUCT FORM MODAL -->
+<div id="productFormModal" class="modal-overlay" onclick="closeModalOnOverlay(event,'productFormModal')">
+  <div class="modal-box" style="max-width:680px">
+    <button class="modal-close" onclick="closeModal('productFormModal')">✕</button>
+    <h2 class="modal-title" id="pfTitle">Thêm sản phẩm</h2>
+    <form id="productForm" onsubmit="submitProductForm(event)" enctype="multipart/form-data">
+      <input type="hidden" id="pf_id">
+      <div class="form-row">
+        <div class="form-group"><label>Tên sản phẩm *</label><input type="text" id="pf_name" required></div>
+        <div class="form-group"><label>Tình trạng</label>
+          <select id="pf_condition"><option value="new">Hàng mới</option><option value="used">Hàng cũ</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Giá bán (₫) *</label><input type="number" id="pf_price" required min="0"></div>
+        <div class="form-group"><label>Giá gốc (₫)</label><input type="number" id="pf_orig" min="0"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Số lượng tồn kho</label><input type="number" id="pf_stock" min="0" value="0"></div>
+        <div class="form-group"><label>Danh mục</label>
+          <select id="pf_cat"><option value="iphone">iPhone</option><option value="accessory">Phụ kiện</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label>Mô tả</label><textarea id="pf_desc" rows="3"></textarea></div>
+      <div class="form-group"><label>Màu sắc (phân cách bằng dấu phẩy)</label><input type="text" id="pf_colors" placeholder="Đen, Trắng, Titan sa mạc"></div>
+      <div class="form-group"><label>Thông số kỹ thuật (JSON)</label><textarea id="pf_specs" rows="3" placeholder='{"Chip":"A18 Pro","Camera":"48MP","Màn hình":"6.9 inch"}'></textarea></div>
+      <div class="form-group"><label>Hình ảnh sản phẩm (tối đa 5)</label><input type="file" id="pf_images" accept="image/*" multiple></div>
+      <div id="pf_existing_imgs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px"></div>
+      <div id="pfError" class="form-error"></div>
+      <button type="submit" class="btn-primary w100">Lưu sản phẩm</button>
+    </form>
+  </div>
+</div>
+
+<!-- BANNER FORM MODAL -->
+<div id="bannerFormModal" class="modal-overlay" onclick="closeModalOnOverlay(event,'bannerFormModal')">
+  <div class="modal-box" style="max-width:540px">
+    <button class="modal-close" onclick="closeModal('bannerFormModal')">✕</button>
+    <h2 class="modal-title" id="bfTitle">Thêm Banner</h2>
+    <form id="bannerForm" onsubmit="submitBannerForm(event)">
+      <input type="hidden" id="bf_id">
+      <div class="form-group"><label>Tiêu đề</label><input type="text" id="bf_title"></div>
+      <div class="form-group"><label>Phụ đề</label><input type="text" id="bf_subtitle"></div>
+      <div class="form-group"><label>Link (tùy chọn)</label><input type="url" id="bf_link" placeholder="https://..."></div>
+      <div class="form-group"><label>Thứ tự hiển thị</label><input type="number" id="bf_order" value="0" min="0"></div>
+      <div class="form-group"><label>Hình ảnh banner</label><input type="file" id="bf_image" accept="image/*"></div>
+      <div id="bfError" class="form-error"></div>
+      <button type="submit" class="btn-primary w100">Lưu banner</button>
+    </form>
+  </div>
+</div>
+
+<!-- ADMIN CHANGE PASSWORD MODAL -->
+<div id="adminChangePasswordModal" class="modal-overlay" onclick="closeModalOnOverlay(event,'adminChangePasswordModal')">
+  <div class="modal-box" style="max-width:420px">
+    <button class="modal-close" onclick="closeModal('adminChangePasswordModal')">✕</button>
+    <h2 class="modal-title">🔐 Đổi mật khẩu</h2>
+    <form id="adminChangePasswordForm" onsubmit="adminChangePassword(event)">
+      <div class="form-group">
+        <label>Mật khẩu cũ</label>
+        <input type="password" id="acpOldPassword" placeholder="Nhập mật khẩu cũ" required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>Mật khẩu mới</label>
+        <input type="password" id="acpNewPassword" placeholder="Nhập mật khẩu mới (ít nhất 6 ký tự)" required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>Xác nhận mật khẩu mới</label>
+        <input type="password" id="acpConfirmPassword" placeholder="Xác nhận mật khẩu mới" required autocomplete="off">
+      </div>
+      <div id="acpError" class="form-error"></div>
+      <button type="submit" class="btn-primary w100">Đổi mật khẩu</button>
+    </form>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="/js/admin.js"></script>
+</body>
+</html>
