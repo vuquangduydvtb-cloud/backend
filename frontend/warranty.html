@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bảo Hành 12 Tháng - iStore</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .info-container { max-width: 1200px; margin: 0 auto; padding: 60px 40px; }
+    .info-hero { background: linear-gradient(135deg, rgba(212,168,75,0.1), rgba(212,168,75,0.02)); border-radius: 20px; padding: 60px 40px; margin-bottom: 60px; text-align: center; }
+    .info-title { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; color: var(--white); margin-bottom: 20px; }
+    .info-subtitle { font-size: 1.1rem; color: var(--gray); margin-bottom: 10px; }
+    .info-highlight { color: var(--gold); font-weight: 700; }
+    
+    .benefit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 60px 0; }
+    .benefit-card { background: var(--bg2); border: 1.5px solid var(--border2); border-radius: 20px; padding: 30px; transition: all 0.3s; }
+    .benefit-card:hover { background: var(--bg3); border-color: var(--gold); transform: translateY(-5px); }
+    .benefit-card h3 { color: var(--gold); font-size: 1.3rem; margin-bottom: 12px; }
+    .benefit-card p { color: var(--text); line-height: 1.8; }
+    
+    .coverage-section { background: var(--bg3); border-radius: 20px; padding: 40px; margin: 40px 0; }
+    .coverage-section h3 { color: var(--gold); margin-bottom: 30px; font-size: 1.5rem; }
+    .coverage-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+    .coverage-item { background: var(--bg2); padding: 20px; border-radius: 12px; border-left: 4px solid var(--gold); }
+    .coverage-item strong { color: var(--gold); display: block; margin-bottom: 5px; }
+    .coverage-item p { font-size: 0.9rem; color: var(--gray); }
+    
+    .exclusion-section { background: var(--bg2); border-radius: 20px; padding: 40px; margin: 40px 0; border: 1.5px solid var(--border); }
+    .exclusion-section h3 { color: #e05252; margin-bottom: 20px; font-size: 1.3rem; }
+    .exclusion-list { list-style: none; }
+    .exclusion-list li { padding: 10px 0; color: var(--text); border-bottom: 1px solid var(--border2); display: flex; gap: 10px; }
+    .exclusion-list li:last-child { border-bottom: none; }
+    .exclusion-list li::before { content: "✗"; color: #e05252; font-weight: bold; flex-shrink: 0; }
+    
+    .process-section { margin: 60px 0; }
+    .process-section h2 { color: var(--gold); font-size: 2rem; margin-bottom: 40px; text-align: center; }
+    .process-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+    .step { background: var(--bg2); border-radius: 12px; padding: 25px; text-align: center; border: 1.5px solid var(--border2); }
+    .step-number { display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%; background: var(--gold); color: #1a1200; font-weight: 900; font-size: 1.5rem; margin-bottom: 15px; }
+    .step h4 { color: var(--text); margin-bottom: 10px; }
+    .step p { font-size: 0.9rem; color: var(--gray); }
+    
+    .faq-section { margin: 60px 0; }
+    .faq-item { background: var(--bg2); border-radius: 12px; margin-bottom: 12px; border: 1.5px solid var(--border2); overflow: hidden; }
+    .faq-header { background: var(--bg3); padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
+    .faq-header:hover { background: var(--bg4); }
+    .faq-header strong { color: var(--text); }
+    .faq-toggle { color: var(--gold); font-weight: bold; }
+    .faq-content { padding: 20px; color: var(--gray); line-height: 1.8; max-height: 0; overflow: hidden; transition: max-height 0.3s; }
+    .faq-item.active .faq-content { max-height: 500px; }
+    
+    .cta-section { background: linear-gradient(135deg, rgba(212,168,75,0.15), rgba(212,168,75,0.08)); border-radius: 20px; padding: 60px 40px; text-align: center; margin-top: 60px; }
+    .cta-section h2 { color: var(--white); margin-bottom: 20px; }
+    .btn-large { display: inline-block; padding: 18px 40px; background: var(--gold); color: #1a1200; border: none; border-radius: 100px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn-large:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    .back-link { display: inline-block; margin-bottom: 30px; color: var(--gold); font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .back-link:hover { color: var(--gold-light); }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">iStore</a>
+      <div class="nav-links">
+        <a href="/#products" class="nav-link">📱 Sản phẩm</a>
+      </div>
+      <div class="nav-actions">
+        <button class="nav-icon-btn" onclick="window.location.href='/'">🏠 Trang chủ</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <div class="info-container" style="margin-top: 100px;">
+    <a class="back-link" onclick="window.history.back()">← Quay lại</a>
+
+    <div class="info-hero">
+      <div class="info-title">🛡️ Bảo Hành 12 Tháng</div>
+      <p class="info-subtitle">Bảo vệ toàn cầu cho chiếc iPhone của bạn <span class="info-highlight">từ Apple</span></p>
+      <p style="color: var(--gold); font-size: 1.1rem; margin-top: 20px;">Bảo hành <span style="font-weight: 700; font-size: 1.3rem;">12 tháng từ ngày mua</span> tại bất kỳ trung tâm Apple nào</p>
+    </div>
+
+    <!-- BENEFITS -->
+    <div class="benefit-grid">
+      <div class="benefit-card">
+        <h3>✅ Bảo Hành Apple Chính Hãng</h3>
+        <p>Tất cả sản phẩm của iStore được bảo hành trực tiếp từ Apple, không phải bảo hành từ bên thứ ba.</p>
+      </div>
+      <div class="benefit-card">
+        <h3>🌍 Bảo Hành Toàn Cầu</h3>
+        <p>Bảo hành được áp dụng tại bất kỳ trung tâm Apple Authorized Service ở bất kỳ quốc gia nào.</p>
+      </div>
+      <div class="benefit-card">
+        <h3>📱 Đầy Đủ Các Mô Hình</h3>
+        <p>Bảo hành áp dụng cho iPhone, iPad, MacBook và tất cả các sản phẩm Apple khác từ iStore.</p>
+      </div>
+      <div class="benefit-card">
+        <h3>🔧 Sửa Chữa & Thay Thế</h3>
+        <p>Nếu có lỗi kỹ thuật, bạn có thể sửa chữa hoàn toàn miễn phí hoặc được thay thiết bị mới.</p>
+      </div>
+      <div class="benefit-card">
+        <h3>⏰ Từ Ngày Kích Hoạt</h3>
+        <p>Thời hạn bảo hành bắt đầu từ ngày kích hoạt thiết bị hoặc ngày mua, tùy theo điều kiện sớm hơn.</p>
+      </div>
+      <div class="benefit-card">
+        <h3>💯 Không Cần Chứng Giấy</h3>
+        <p>Không cần chứng chỉ bảo hành giấy. Apple có hệ thống quản lý bảo hành trực tuyến hoàn toàn.</p>
+      </div>
+    </div>
+
+    <!-- WHAT'S COVERED -->
+    <div class="coverage-section">
+      <h3>✅ Những Gì Được Bao Gồm</h3>
+      <div class="coverage-list">
+        <div class="coverage-item">
+          <strong>Lỗi Kỹ Thuật</strong>
+          <p>Lỗi linh kiện sản xuất, lỗi phần mềm hoặc vấn đề về hiệu suất</p>
+        </div>
+        <div class="coverage-item">
+          <strong>Pin Hỏng</strong>
+          <p>Pin không tích điện được hoặc pin chứa dung lượng dưới 80%</p>
+        </div>
+        <div class="coverage-item">
+          <strong>Màn Hình Bị Lỏng</strong>
+          <p>Màn hình bị tách ra do khiếm khuyết sản xuất</p>
+        </div>
+        <div class="coverage-item">
+          <strong>Thay Thế Miễn Phí</strong>
+          <p>Nếu không thể sửa, thiết bị sẽ được thay thế bằng một chiếc mới</p>
+        </div>
+        <div class="coverage-item">
+          <strong>Dịch Vụ Kỹ Thuật Số</strong>
+          <p>Hỗ trợ kỹ thuật toàn bộ thời gian bảo hành</p>
+        </div>
+        <div class="coverage-item">
+          <strong>Cấp Thiết Bị Thay Thế</strong>
+          <p>Trong lúc sửa chữa, bạn có thể nhận thiết bị tạm thời miễn phí</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOT COVERED -->
+    <div class="exclusion-section">
+      <h3>❌ Những Gì KHÔNG Được Bao Gồm</h3>
+      <ul class="exclusion-list">
+        <li>Hư hỏng do tai nạn hoặc va chạm</li>
+        <li>Nước hoặc độ ẩm cao gây hư hỏng</li>
+        <li>Mở rộp bất cứ bộ phận nào (trừ khi được phép)</li>
+        <li>Sửa chữa bởi cơ sở không phải Apple Authorized</li>
+        <li>Hảy gỉ do tiếp xúc với chất lỏng</li>
+        <li>Mất mát hoặc trộm cắp</li>
+        <li>Vấn đề về phần mềm từ bên thứ ba (nếu có)</li>
+      </ul>
+    </div>
+
+    <!-- QUY TRÌNH CLAIM BẢO HÀNH -->
+    <div class="process-section">
+      <h2>📋 Quy Trình Claim Bảo Hành</h2>
+      <div class="process-steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h4>Liên Hệ iStore</h4>
+          <p>Gọi hoặc gửi tin nhắn cho iStore để báo cáo vấn đề</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h4>Xác Minh Bảo Hành</h4>
+          <p>Chúng tôi sẽ kiểm tra thiết bị và xác minh bảo hành</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h4>Gửi Đến Apple</h4>
+          <p>Thiết bị sẽ được gửi đến trung tâm Apple Authorized Service</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h4>Sửa Chữa Hoặc Thay Thế</h4>
+          <p>Apple sẽ sửa chữa hoặc thay thế thiết bị nếu cần</p>
+        </div>
+        <div class="step">
+          <div class="step-number">5</div>
+          <h4>Nhận Thiết Bị</h4>
+          <p>Nhận thiết bị đã sửa chữa hoặc thiết bị mới</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-section">
+      <h2 style="color: var(--gold); font-size: 2rem; margin-bottom: 30px; text-align: center;">❓ Câu Hỏi Thường Gặp</h2>
+      
+      <div class="faq-item" onclick="this.classList.toggle('active')">
+        <div class="faq-header">
+          <strong>Bảo hành 12 tháng có bắt đầu từ khi nào?</strong>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-content">
+          Bảo hành bắt đầu từ ngày kích hoạt thiết bị hoặc ngày mua, tùy theo ngày nào sớm hơn. iStore sẽ cung cấp giấy chứng nhận bảo hành chi tiết có ghi rõ ngày bắt đầu bảo hành.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('active')">
+        <div class="faq-header">
+          <strong>Tôi có thể mua bảo hành mở rộng không?</strong>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-content">
+          Có, iStore cung cấp các gói bảo hành mở rộng thêm 12 hoặc 24 tháng với chi phí rất cạnh tranh. Bạn cũng có thể mua Apple Care+ để được bảo vệ trọn vẹn hơn, bao gồm cả tai nạn.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('active')">
+        <div class="faq-header">
+          <strong>Nếu máy của tôi bị nước có được bảo hành không?</strong>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-content">
+          Không, bảo hành Apple không bao gồm hư hỏng do nước. Tuy nhiên, iPhone hiện nay đều có chống nước (IP68). Nếu bạn muốn bảo vệ toàn diện, hãy mua Apple Care+ bao gồm dịch vụ thiệt hại.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('active')">
+        <div class="faq-header">
+          <strong>Bảo hành có áp dụng khi tôi bán lại điện thoại không?</strong>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-content">
+          Có, bảo hành được chuyển tiếp cho chủ sở hữu mới. Bảo hành giữ nguyên thời hạn từ ngày kích hoạt ban đầu, không bắt đầu lại.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('active')">
+        <div class="faq-header">
+          <strong>Quá trình sửa chữa mất bao lâu?</strong>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-content">
+          Thông thường từ 5-10 ngày làm việc tùy thuộc vào vấn đề. Nếu cần thay thế, sẽ nhanh hơn. iStore sẽ cập nhật tiến độ cho bạn hàng ngày.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('active')">
+        <div class="faq-header">
+          <strong>Tôi cần giấy chứng nhận bảo hành không?</strong>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-content">
+          Không bắt buộc. Apple quản lý tất cả bảo hành qua hệ thống trực tuyến của họ dựa trên số IMEI của thiết bị. Tuy nhiên, iStore sẽ cung cấp giấy chứng nhận để bạn lưu trữ.
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+      <h2>Yên tâm mua sắm với bảo hành uy tín từ Apple</h2>
+      <p style="margin: 20px 0; color: var(--gray);">Tất cả sản phẩm từ iStore đều được bảo hành chính hãng 12 tháng</p>
+      <button class="btn-large" onclick="window.location.href='/'">Xem Tất Cả Sản Phẩm →</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="main-footer" style="margin-top: 60px;">
+    <div class="footer-inner">
+      <div>
+        <div class="nav-logo" style="margin-bottom:12px">iStore</div>
+        <p>Hệ thống bán lẻ iPhone chính hãng uy tín hàng đầu Việt Nam.</p>
+        <p style="margin-top:8px">📞 <a href="tel:0909123456">0909 123 456</a></p>
+      </div>
+      <div><h4>Dịch vụ</h4><ul><li><a href="/installment.html">💳 Trả góp 0%</a></li><li><a href="/warranty.html">🛡️ Bảo hành 12 tháng</a></li></ul></div>
+      <div><h4>Liên hệ</h4><ul><li><a href="https://zalo.me/0909123456" target="_blank">Zalo: 0909 123 456</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 iStore Vietnam · iPhone chính hãng VN/A</p></div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
